@@ -1,4 +1,7 @@
-# First install
+# Wsl environment management
+Git repository git@github.com:STIMDATA/wsl-debian.git
+
+## First install
 ```
 wsl --unregister devenv
 wsl --import devenv . snapshots/12-devenv.tar.gz --version 2
