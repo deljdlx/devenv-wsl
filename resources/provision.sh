@@ -8,19 +8,21 @@ sudo apt-get install -y --no-install-recommends \
   traceroute socat netcat-openbsd curl wget openssl \
   git vim nano less jq yq unzip zip tree file man-db bash-completion \
   lsof procps psmisc htop rsync ripgrep fd-find locate inotify-tools \
-  ca-certificates ncdu mariadb-client ca-certificates
+  ca-certificates ncdu mariadb-client openssh-client
 
 # install make
 sudo apt-get install -y --no-install-recommends make
-
 sudo apt-get install -y --no-install-recommends wget curl
 
 # install nodejs and npm and n
+echoGreen "Install NodeJS and npm"
 sudo apt-get install -y --no-install-recommends \
   nodejs npm
 sudo npm install -g n
 sudo n stable
 
+
+echoGreen "Install PHP 8.4 and extensions"
 #install php 8.4 and composer
 # add repository for php 8.4
 sudo apt-get update
@@ -37,12 +39,18 @@ curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 sudo chmod +x /usr/local/bin/composer
 
+
+echoGreen 'Add user to docker group'
+sudo usermod -aG docker $USER
+
 sudo apt-get clean
 sudo rm -rf /var/lib/apt/lists/*
 echo
-echo "✅ Installation terminée — outils de diagnostic prêts."
+echoGreen "✅ Installation terminée — outils de diagnostic prêts."
 echo
 
+
+mkdor -p ~/.ssh
 
 if ! git config --global user.name > /dev/null; then
   read -rp "Enter your git user.name: " git_username
