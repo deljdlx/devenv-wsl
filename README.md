@@ -1,5 +1,13 @@
 # Wsl environment management
-Git repository git@github.com:STIMDATA/wsl-debian.git
+Github repository https://github.com/STIMDATA/wsl-debian
+
+
+## Cloning repository
+
+```
+git clone git@github.com:STIMDATA/wsl-debian.git
+```
+
 
 ## First install
 ```
