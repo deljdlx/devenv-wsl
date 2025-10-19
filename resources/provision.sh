@@ -1,14 +1,45 @@
 #!/usr/bin/env bash
 set -e
 
+echoRed() {
+  printf "\033[0;31m%s\033[0m\n" "$1"
+}
+
+echoGreen() {
+  printf "\033[0;32m%s\033[0m\n" "$1"
+}
+
+echoYellow() {
+  printf "\033[0;33m%s\033[0m\n" "$1"
+}
+
+echoBlue() {
+  printf "\033[0;34m%s\033[0m\n" "$1"
+}
+
+echoCyan() {
+  printf "\033[0;36m%s\033[0m\n" "$1"
+}
+
+
+
+echoCyan =====================================================
+echoCyan "Provisioning du shell WSL"
+echoCyan =====================================================
+
+
 sudo apt-get update -y
 
+
+echoGreen =====================================================
+echoGreen "Install basic diagnostic tools"
+echoGreen =====================================================
 sudo apt-get install -y --no-install-recommends \
   iproute2 iputils-ping net-tools dnsutils \
   traceroute socat netcat-openbsd curl wget openssl \
   git vim nano less jq yq unzip zip tree file man-db bash-completion \
   lsof procps psmisc htop rsync ripgrep fd-find locate inotify-tools \
-  ca-certificates ncdu mariadb-client openssh-client
+  ca-certificates ncdu mariadb-client openssh-client telnet
 
 # install make
 sudo apt-get install -y --no-install-recommends make
@@ -50,7 +81,13 @@ echoGreen "✅ Installation terminée — outils de diagnostic prêts."
 echo
 
 
-mkdor -p ~/.ssh
+mkdir -p ~/.ssh
+mkdir -p ~/__dev
+
+
+echoCyan =====================================================
+echoCyan "Configuration git"
+echoCyan =====================================================
 
 if ! git config --global user.name > /dev/null; then
   read -rp "Enter your git user.name: " git_username
@@ -61,4 +98,7 @@ if ! git config --global user.email > /dev/null; then
   git config --global user.email "$git_email"
 fi
 
+echoCyan =====================================================
+echoCyan "Pensez à créer ou ajouter vos clés SSH dans ~/.ssh/"
+echoCyan =====================================================
 

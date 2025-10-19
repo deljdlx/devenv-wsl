@@ -134,19 +134,35 @@ echoCyan() {
 }
 
 
+
+parse_git_branch() {
+  git branch 2>/dev/null | sed -n '/\* /s///p'
+}
+
+parse_git_repo() {
+  git config --get remote.origin.url 2>/dev/null | sed -n 's/.*\/\([^.]*\)\(.git\)\{0,1\}/\1/p'
+}
+
+# Personnalisation du prompt
+# export PS1="\u@\h \W\[\033[32m\]:\$(parse_git_branch)\[\033[00m\] $ "
+
+export PS1="\u \w:\[\033[35m\]\$(parse_git_repo)\[\033[00m\]\[\033[32m\]:\$(parse_git_branch)\[\033[00m\] $ "
+
+# if in a docker container, add a specific indicator to the prompt
+if [ -f /.dockerenv ]; then
+    export PS1="📦 $PS1"
+fi
+
+
 cd ~
 
 # check if .provision_done file exists
 if [ -f ~/.provision_done ]; then
     echoGreen "✅ Provisioning déjà effectué. Vous pouvez utiliser votre shell."
 else
-
-    echoCyan =====================================================
-    echoCyan "Provisioning du shell WSL"
-    echoCyan =====================================================
-
       # prompt user to run provision.sh yes/no
-    read -p "⚠️  Le provisioning n'a pas encore été effectué. Voulez-vous l'exécuter maintenant ? (y/n) " -n 1 -r
+    echoGreen "⚠️  Le provisioning n'a pas encore été effectué"
+    read -p "Voulez-vous l'exécuter maintenant ? (y/n) " -n 1 -r
     echo    # move to a new line
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         bash ~/provision.sh
