@@ -1,3 +1,11 @@
+## WIP Check hyper-v service
+Vérifier que le service Hyper-V est bien activé
+
+PowerShell (en mode administrateur)
+```
+dism.exe /Online /Enable-Feature:Microsoft-Hyper-V /All
+```
+
 ## Vérifier les autres wsl
 
 Attention à ne pas avoir d'autres distributions WSL en cours d'exécution, cela peut poser des problèmes de ports.
@@ -18,26 +26,26 @@ netstat -aon | findstr LISTENING | findstr :443
 
 ## Création WSL à partir d'un snapshot
 
-[Télécharger le snapshot](https://drive.google.com/file/d/1EJ1QjbhePUpzKi4cS5Lez3UEgfimP7KP/view?usp=sharing)
+[Télécharger le snapshot](https://drive.google.com/file/d/1bM1m-Y-yXHJJCsFMFmTwUGZWHLGSbhKL/view?usp=sharing)
 
 ### Créations des dossiers
 
 ```
-mkdir C:\Users\%USERNAME%\Desktop\devenv
-mkdir C:\Users\%USERNAME%\Desktop\devenv\snapshots
+mkdir C:\Users\%USERNAME%\Desktop\DEBIAN
+mkdir C:\Users\%USERNAME%\Desktop\DEBIAN\snapshots
 # déplacer le snapshot téléchargé dans le dossier snapshots
 ```
 
 ### Créer la distribution WSL
 
 ```
-cd C:\Users\%USERNAME%\Desktop\devenv
-wsl --import devenv .\devenv\snapshots\20-devenv.tar.gz --version 2
+cd C:\Users\%USERNAME%\Desktop\DEBIAN
+wsl --import DEBIAN . snapshots\24-devenv.tar.gz --version 2
 ```
 
 ### Lancer la distribution
 ```
-wsl --distribution devenv
+wsl --distribution DEBIAN
 ```
 
 
@@ -52,12 +60,12 @@ ___
 
 #### Restaurer un snapshot
 ```
-wsl --unregister devenv
-wsl --import devenv . snapshots/12-devenv.tar.gz --version 2
-wsl --distribution devenv
+wsl --unregister DEBIAN
+wsl --import DEBIAN . snapshots/12-devenv.tar.gz --version 2
+wsl --distribution DEBIAN
 ```
 
 #### Take snapshot
 ```
-wsl --export devenv snapshots/12-devenv.tar.gz
+wsl --export DEBIAN snapshots/12-devenv.tar.gz
 ```
