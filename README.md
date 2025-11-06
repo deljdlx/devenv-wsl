@@ -61,11 +61,27 @@ ___
 #### Restaurer un snapshot
 ```
 wsl --unregister DEBIAN
-wsl --import DEBIAN . snapshots/12-devenv.tar.gz --version 2
+wsl --import DEBIAN . snapshots/26-devenv.tar.gz --version 2
 wsl --distribution DEBIAN
 ```
 
 #### Take snapshot
+
+```
+sudo apt-get autoremove -y
+sudo apt-get autoclean -y
+sudo apt-get clean
+
+# Purge du cache apt et logs
+sudo rm -rf /var/lib/apt/lists/*
+sudo journalctl --vacuum-time=1d
+
+sudo rm -rf /var/log/*.log
+sudo rm -rf /var/log/**/*.log
+sudo rm -rf /tmp/*
+```
+
+
 ```
 wsl --export DEBIAN snapshots/12-devenv.tar.gz
 ```
