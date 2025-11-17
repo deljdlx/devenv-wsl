@@ -32,7 +32,6 @@ sudo apt-get install -y --no-install-recommends \
   make gpg
 
 
-
 echoGreen "====================================================="
 echoGreen "Install Gum"
 echoGreen "====================================================="
@@ -51,75 +50,6 @@ if ! command -v gum >/dev/null 2>&1; then
   fi
 fi
 
-
-PHP_VERSIONS=(8.4 8.3 7.4 7.3 7.1)
-echoGreen "====================================================="
-echoGreen "Install install PHP versions: ${PHP_VERSIONS[*]}"
-echoGreen "====================================================="
-
-# =======================================================
-# 1) Récupérer la clé GPG et la stocker comme keyring dédié
-sudo curl -fsSL https://packages.sury.org/php/apt.gpg \
-  | sudo gpg --dearmor -o /usr/share/keyrings/deb.sury.org-php.gpg
-
-# 2) Déclarer le dépôt avec signed-by
-echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" \
-  | sudo tee /etc/apt/sources.list.d/deb.sury.org-php.list
-
-# 3) Mettre à jour
-sudo apt update -y
-
-# =======================================================
-
-PHP_MODULES=(
-  cli
-  common
-  fpm
-  mysql
-  xml
-  curl
-  mbstring
-  zip
-  bcmath
-  intl
-  gd
-  imagick
-  dev
-  soap
-  opcache
-  sqlite3
-)
-
-for v in "${PHP_VERSIONS[@]}"; do
-  echo ">>> Installation PHP ${v}"
-
-  pkgs=("php${v}")  # paquet principal (meta)
-
-  # Construire la liste des paquets à partir des modules
-  for m in "${PHP_MODULES[@]}"; do
-    pkgs+=("php${v}-${m}")
-  done
-
-  # Installation
-  sudo apt-get install -y --no-install-recommends "${pkgs[@]}"
-
-  # Alias propre
-  # (alias php8.4=/usr/bin/php8.4, alias php7.4=/usr/bin/php7.4, etc.)
-  echo "alias php${v}=/usr/bin/php${v}" >> "$HOME/.bashrc"
-done
-
-
-
-if command -v update-alternatives >/dev/null 2>&1; then
-  sudo update-alternatives --set php /usr/bin/php8.4 || true
-fi
-
-
-if ! command -v composer >/dev/null 2>&1; then
-  curl -fsSL https://getcomposer.org/installer | php
-  sudo mv composer.phar /usr/local/bin/composer
-  sudo chmod +x /usr/local/bin/composer
-fi
 
 echoGreen "====================================================="
 echoGreen "Install outils système & réseau (diagnostic)"
@@ -199,16 +129,11 @@ if ! grep -q '/usr/local/bin' <<<"$PATH"; then
 fi
 hash -r
 
-# echoGreen "====================================================="
-# echoGreen "Install PHP 8.4 + Composer (Sury pour Trixie)"
-# echoGreen "====================================================="
-# sudo curl -fsSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb
-# sudo dpkg -i /tmp/debsuryorg-archive-keyring.deb
-# echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" \
-#   | sudo tee /etc/apt/sources.list.d/php.list >/dev/null
-# sudo apt-get update -y
-
-
+if ! command -v composer >/dev/null 2>&1; then
+  curl -fsSL https://getcomposer.org/installer | php
+  sudo mv composer.phar /usr/local/bin/composer
+  sudo chmod +x /usr/local/bin/composer
+fi
 
 echoGreen "====================================================="
 echoGreen "Groupe docker (si présent côté WSL)"
@@ -217,19 +142,12 @@ if getent group docker >/dev/null 2>&1; then
   sudo usermod -aG docker "$USER" || true
 fi
 
-echoGreen "====================================================="
-echoGreen "Création dossier de travail __dev"
-mkdir -p "$HOME/.ssh" "$HOME/__dev"
-echoGreen "====================================================="
-
-
-
 echoCyan "====================================================="
 echoCyan " Configuration git"
 echoCyan "====================================================="
 
 if ! git config --global user.name >/dev/null 2>&1; then
-  git_username=$(gum input --placeholder "Nom Git (ex: Julien Delsescaux)" --prompt "👤  Votre nom Git : ")
+  git_username=$(gum input --placeholder "Nom Git (ex: John Doe)" --prompt "👤  Votre nom Git : ")
   git config --global user.name "$git_username"
 fi
 
