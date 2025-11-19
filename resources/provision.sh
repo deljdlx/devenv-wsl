@@ -120,6 +120,13 @@ if ! command -v composer >/dev/null 2>&1; then
   sudo chmod +x /usr/local/bin/composer
 fi
 
+# install psysh globaly
+if ! command -v psysh >/dev/null 2>&1; then
+  wget https://psysh.org/psysh
+  chmod +x psysh
+  sudo mv psysh /usr/local/bin/psysh
+fi
+
 echoGreen "====================================================="
 echoGreen "Install outils système & réseau (diagnostic)"
 echoGreen "====================================================="
