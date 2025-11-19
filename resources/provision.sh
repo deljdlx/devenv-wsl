@@ -107,8 +107,6 @@ for v in "${PHP_VERSIONS[@]}"; do
   echo "alias php${v}=/usr/bin/php${v}" >> "$HOME/.bashrc"
 done
 
-
-
 if command -v update-alternatives >/dev/null 2>&1; then
   sudo update-alternatives --set php /usr/bin/php8.4 || true
 fi
